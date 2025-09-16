@@ -2,8 +2,8 @@
 
 # 1 Задание
 
-    - Создан hosts.ini и помещен в ./ansible/inventories/prod/hosts.ini
-    (Также можно проверить "sh-keyscan -p SSH_PORT_SERVER -H SSH_HOST_SERVER >> ~/.ssh/known_hosts && ansible -i hosts.ini all -m ping")
+· Создан hosts.ini и помещен в ./ansible/inventories/prod/hosts.ini
+(Также можно проверить "sh-keyscan -p SSH_PORT_SERVER -H SSH_HOST_SERVER >> ~/.ssh/known_hosts && ansible -i hosts.ini all -m ping")
 
     - Роль "copy" создана через команду "ansible-galaxy init roles/copy" и расписана таска ./ansible/roles/copy/tasks/main.yml, после чего подключена в основной playbook.yml
 
