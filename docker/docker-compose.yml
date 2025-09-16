@@ -1,0 +1,50 @@
+name: vita
+
+services:
+  php:
+    image: php:7.4-fpm
+    ports:
+      - 9000:9000
+    volumes:
+      - ./php/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./www:/var/local/sandboxes/dev/www
+    environment:
+      - PHP_FPM_LISTEN=0.0.0.0:9000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "grep -q 'php-fpm' /proc/1/comm"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - vita-network
+  nginx:
+    image: nginx:1.25
+    depends_on:
+      php:
+        condition: service_healthy
+    ports:
+      - 1234:80
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
+    networks:
+      - vita-network
+
+  postgres:
+    image: postgres:15
+    ports:
+      - 15432:5432
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    restart: unless-stopped
+    networks:
+      - vita-network
+
+networks:
+  vita-network:
+    driver: bridge

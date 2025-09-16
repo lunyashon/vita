@@ -1,0 +1,16 @@
+---
+# tasks file for roles/copy
+- name: copy env files
+  become: true
+  become_user: root
+  become_method: sudo
+  copy:
+    src: "{{ item }}"
+    dest: "/home/root/{{ item | basename }}"
+    owner: root
+    group: root
+    mode: '0644'
+  loop: "{{ query('fileglob', playbook_dir ~ '/files/*.env') }}"
+  tags:
+    - copy
+    - env
